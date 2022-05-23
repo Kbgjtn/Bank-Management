@@ -62,7 +62,7 @@ void transaction();
 
 int main() {
     // declare variable
-    char * action;
+    char action;
     int count;
     
     do {
@@ -70,25 +70,24 @@ int main() {
 
         printf("\t\t     nb: ");
         printf("press [ctr + c] to exit!\n");
-        printf("\n\t\t     do you already have an account? [y|n]\n");
+        printf("\n\t\t     DO U ALREADY HAVE AN ACCOUNT? [y|n]\n");
         printf("\t\t     [INPUT]: ");
-        getchar();
-        scanf("%c", action);
+        scanf("%c", &action);
+        
+        if ((action == 'y') || (action == 'Y') || (action == 'N') || (action == 'n')) {
+            optionFeatures(&action);
+        }
 
-        // tolower
-        printf("%c", (action));
-
-        if ((* action != 'y') || (* action != 'Y') || (* action != 'N') || (* action != 'n')) {
+        if ((action != 'y') || (action != 'Y') || (action != 'N') || (action != 'n')) {
             printf("\n\n\t\t     ALERT: INCORRECT, PLEASE TRY AGAIN!");
             getchar();
         }
-        if ((* action == 'y') || (* action == 'Y') || (* action == 'N') || (* action == 'n')) {
-            optionFeatures(action);
-        }
-        
-        // system("cls") || system("clear");
 
-    } while ((* action != 'y') || (* action != 'Y') || (* action != 'N') || (* action != 'n'));    
+        
+        getchar();
+        system("cls") || system("clear");
+
+    } while ((action != 'y') || (action != 'Y') || (action != 'N') || (action != 'n'));    
 
     getchar();
 
@@ -657,6 +656,7 @@ void createFileData() {
 
 int optionFeatures(char *act) {
     int valid = 0, option, count = 5;
+
     do {
         if ((*act == 'y') || (*act == 'Y')) {        
             system("cls") || system("clear");
@@ -666,13 +666,13 @@ int optionFeatures(char *act) {
                 count--;
                 if (count == 0) {
                     getchar();
-                    printf("\n\t\t     ALERT: EXIT , YOU EXCEED THE MAXIMUM LIMIT!");
-                    return(1);
+                    printf("\n\t\t     ALERT: EXIT PROGRAM, YOU EXCEED THE MAXIMUM LIMIT!");
+                    return(0);
                 }
                 valid = validationUser(0);
-                printf("\n\t\t     ALERT: SORRY, YOUR PIN OR userName WAS INCORRECT.\n");
-                printf("\t\t            PLEASE DOUBLE-CHECK YOUR PASSWORD.\n");
-            } while (valid==0);
+                printf("\n\t\t     ALERT: SORRY, YOUR USERNAME OR PIN WAS INCORRECT.\n");
+                printf("\t\t            PLEASE DOUBLE-CHECK YOUR INPUT.\n");
+            } while (valid == 0);
             system("cls") || system("clear");
 
             do {
