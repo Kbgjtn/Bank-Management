@@ -20,7 +20,7 @@ amount of deposit is Rp. 100.000. Any value below that limit should be responded
  * @declare: char Name[50], pin[10], NoPhone[30], Adress[200], year[5], month[15], day[3]
  */
 
-typedef struct bankData {
+typedef struct BankData {
     lli saldo;
     char name[50];
     char pin[10];
@@ -48,7 +48,7 @@ void createAccount();
 void createFileData();
 void display(char act);
 void displayTransaction();
-void nowUser(char *pin, char *username);
+void nowUser(char *pin, char *userName);
 void printall();
 void transaction();
 
@@ -60,36 +60,39 @@ void transaction();
  * @return value 0 & exit program
  */
 
-
 int main() {
     // declare variable
-    char action;
+    char * action;
     int count;
     
     do {
         team15();
-        
-        printf("\t\t     Do you Have Account?[Y/N]\n");
-        printf("\t\t     Input: ");
-        scanf("%c", &action);
+
+        printf("\t\t     nb: ");
+        printf("press [ctr + c] to exit!\n");
+        printf("\n\t\t     do you already have an account? [y|n]\n");
+        printf("\t\t     [INPUT]: ");
+        getchar();
+        scanf("%c", action);
 
         // tolower
-        
-        if ((action != 'y') || (action != 'Y') || (action != 'N') || (action != 'n')) {
+        printf("%c", (action));
+
+        if ((* action != 'y') || (* action != 'Y') || (* action != 'N') || (* action != 'n')) {
             printf("\n\n\t\t     ALERT: INCORRECT, PLEASE TRY AGAIN!");
             getchar();
         }
-        if ((action == 'y') || (action == 'Y') || (action == 'N') || (action == 'n')) {
-            optionFeatures(&action);
+        if ((* action == 'y') || (* action == 'Y') || (* action == 'N') || (* action == 'n')) {
+            optionFeatures(action);
         }
         
-        system("cls") || system("clear");
+        // system("cls") || system("clear");
 
-    } while ((action != 'y') || (action != 'Y') || (action != 'N') || (action != 'n'));    
+    } while ((* action != 'y') || (* action != 'Y') || (* action != 'N') || (* action != 'n'));    
 
     getchar();
 
-    // return value 0   
+    // return value 0  
     return 0;
 }
 
@@ -131,11 +134,11 @@ void display(char act) {
 
 /**
  * @description: prosedur untuk  menampilkan data diri client
- * @objek: dataset ke bankData
+ * @objek: dataset ke BankData
  * @declare: int find
- * @declare: char pin[9] , username[50]
+ * @declare: char pin[9] , userName[50]
  * @call: team15(), 
- * @input: username dan pin client
+ * @input: userName dan pin client
  * @output: data diri client
  */
 
@@ -144,12 +147,12 @@ void accountInfo() {
     
     // call stream file & open file
     FILE *stream;
-    stream = fopen("bank.txt", "r");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
     
     // declare variables
     int find;
     char pin[9];
-    char username[50];
+    char userName[50];
     
     team15();
 
@@ -159,7 +162,7 @@ void accountInfo() {
 
     fflush(stdin);
     printf("\n\t\t     NAME\t: ");
-    scanf("%[^\n]s", username);
+    scanf("%[^\n]s", userName);
 
     fflush(stdin);
     printf("\t\t     PIN \t: ");
@@ -169,7 +172,7 @@ void accountInfo() {
     team15();
 
     while(fread(&dataset, sizeof(BankData), 1, stream)) {
-        if ( (strcmp(dataset.pin, pin) == 0) && (strcmp(dataset.name, username) == 0) ) {
+        if ( (strcmp(dataset.pin, pin) == 0) && (strcmp(dataset.name, userName) == 0) ) {
             printf("\n\t\t\t\t\t\t    ACCOUNT INFO");
             printf("\n\t\t_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
             // name
@@ -197,7 +200,7 @@ void accountInfo() {
 
 /**
  * @description: void function paramater untuk memeriksa akun yang digunakan saat login
- * @objek: datasets ke bankData
+ * @objek: datasets ke BankData
  * @output: saldo user
  */
 
@@ -206,7 +209,7 @@ void nowUser(char *pin, char *userName) {
     
     // call stream file & open file
     FILE *stream;
-    stream = fopen("bank.txt", "r");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
     
     // declare variables
     lli total = 0, scale = 1;
@@ -244,9 +247,9 @@ void nowUser(char *pin, char *userName) {
 
 /**
  * @description: prosedur melakukan deposit dan withdraw
- * @objek: datasets ke bankData
- * @input: char username dan char pin , int choose, int option, int find, long long integer idr
- * @call: team15(), nowUser(pin, username)
+ * @objek: datasets ke BankData
+ * @input: char userName dan char pin , int choose, int option, int find, long long integer idr
+ * @call: team15(), nowUser(pin, userName)
  * @output: jumlah saldo(wallet idr) setelah melakukan transaksi
  */ 
 
@@ -264,7 +267,7 @@ void transaction() {
     printf("\t\t\t\t    | LOGIN |\n");
     printf("\t\t\t\t    ---------\n");
 
-    // username
+    // userName
     fflush(stdin);
     printf("\n\t\t     NAME\t: ");
     scanf("%[^\n]s", userName);
@@ -277,7 +280,7 @@ void transaction() {
     system("cls") || system("clear");
     team15();
     
-    stream = fopen("bank.txt", "r");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
     
     nowUser(pin, userName);
 
@@ -292,7 +295,7 @@ void transaction() {
     // exit stream file
     fclose(stream);
    
-    stream = fopen("bank.txt", "r");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
     windowLog = fopen("window-log.txt", "w");
     
     printf("\n\n\t\t     Do you want to make a transaction now? [y|N]");
@@ -331,8 +334,8 @@ void transaction() {
                         idr = 0;
                     }
 
-                    stream = fopen("bank.txt", "r");
-                    windowLog = fopen("windowlog.txt", "w");
+                    stream = fopen("ccbl-bank-account-user.txt", "r");
+                    windowLog = fopen("windowLog.txt", "w");
                     
                     while ( fread (&datasets, sizeof(BankData), 1, stream) ) {
                         if ( (strcmp(datasets.pin, pin) == 0) && (strcmp(datasets.name, userName) == 0)) {
@@ -355,8 +358,8 @@ void transaction() {
                         printf("\n\t\t     ALERT: YOUR DEPOSIT WAS NOT SUCCESSFUL!\n");
                     }
                     else if (find) {
-                        windowLog = fopen("windowlog.txt", "r");
-                        stream = fopen("bank.txt", "w");
+                        windowLog = fopen("windowLog.txt", "r");
+                        stream = fopen("ccbl-bank-account-user.txt", "w");
                         while ( fread(&datasets, sizeof(BankData), 1, windowLog)) {
                             fwrite (&datasets, sizeof(BankData), 1, stream);
                         }
@@ -384,8 +387,8 @@ void transaction() {
                     }
                     
                     // initialize stream & windowLog file
-                    stream = fopen("bank.txt", "r");
-                    windowLog = fopen("windowlog.txt", "w");
+                    stream = fopen("ccbl-bank-account-user.txt", "r");
+                    windowLog = fopen("windowLog.txt", "w");
                     
                     while ( fread(&datasets, sizeof(BankData), 1, stream) ) {
                         if ( (strcmp(datasets.pin, pin) == 0) && (strcmp(datasets.name, userName) == 0) ) {
@@ -406,8 +409,8 @@ void transaction() {
                     fclose(windowLog);
                     
                     if (find) {
-                        windowLog = fopen("windowlog.txt", "r");
-                        stream = fopen("bank.txt", "w");
+                        windowLog = fopen("windowLog.txt", "r");
+                        stream = fopen("ccbl-bank-account-user.txt", "w");
                         
                         while (fread(&datasets, sizeof(BankData), 1, windowLog)) {
                             fwrite (&datasets, sizeof(BankData), 1, stream);
@@ -445,30 +448,30 @@ void transaction() {
     }
 
     fclose(stream);
-    fclose(windowlog);
+    fclose(windowLog);
 
     printf("\n\t\t     PRESS ENTER TO RETURN TO THE MAIN MENU!");
 }
 
 /**
  * @description: prosedur yang menutup akan user
- * @objek: datasets ke bankData
- * @decare: int found, char pin, username, delete
- * @input: username dan pin client dan kata 'Delete' untuk menutup tabungan
+ * @objek: datasets ke BankData
+ * @decare: int found, char pin, userName, delete
+ * @input: userName dan pin client dan kata 'Delete' untuk menutup tabungan
  * @output: tampilan sukses jika berhasil dihapus dan tampilan sukses apabila tidak berhasil dihapus
  * @author: Naufal Daffa
  */
 
 void closeAccount() {
-    bankData datasets;
-    FILE *stream, *windowlog;
+    BankData datasets;
+    FILE *stream, *windowLog;
 
-    stream = fopen("bank.txt", "r");
-    windowlog = fopen("windowlog.txt", "w");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
+    windowLog = fopen("windowLog.txt", "w");
     
     int found;
     char pin[9];
-    char username[50];
+    char userName[50];
     char delete[7];
 
     // input name & pin
@@ -476,24 +479,24 @@ void closeAccount() {
     printf("\n\t\t     - - - - - - - - - - - - - - - - - - - - - -");
     fflush(stdin);
     printf("\n\t\t     ACCOUNT NAME : ");
-    scanf("%[^\n]s", username);
+    scanf("%[^\n]s", userName);
     fflush(stdin);
     printf("\t\t     ACCOUNT PIN  : ");
     scanf("%[^\n]s", pin);
     printf("\t\t     - - - - - - - - - - - - - - - - - - - - - -\n");
 
 
-    while (fread(&datasets, sizeof(bankData), 1, stream)) {
-        if((strcmp(datasets.pin, pin) == 0) && (strcmp(datasets.Name, username) == 0)) {
+    while (fread(&datasets, sizeof(BankData), 1, stream)) {
+        if((strcmp(datasets.pin, pin) == 0) && (strcmp(datasets.name, userName) == 0)) {
             found = 1;
         }
-        if((strcmp(datasets.pin, pin) != 0) && (strcmp(datasets.Name, username) != 0)) {
-            fwrite(&datasets, sizeof(bankData), 1, windowlog);
+        if((strcmp(datasets.pin, pin) != 0) && (strcmp(datasets.name, userName) != 0)) {
+            fwrite(&datasets, sizeof(BankData), 1, windowLog);
             continue;
         }
     }
     fclose(stream);
-    fclose(windowlog);
+    fclose(windowLog);
 
     printf("\n\t\t     ALERT: WRITE \"Delete\" TO CONTINUE.\n");
     printf("\n\t\t     Input: ");
@@ -506,14 +509,14 @@ void closeAccount() {
     }
     
     if (found == 1) {
-        windowlog = fopen("windowlog.txt", "r");
-        stream = fopen("bank.txt", "w");
+        windowLog = fopen("windowLog.txt", "r");
+        stream = fopen("ccbl-bank-account-user.txt", "w");
 
-        while (fread(&datasets, sizeof(bankData), 1, windowlog)) {
-            fwrite (&datasets, sizeof(bankData), 1, stream);
+        while (fread(&datasets, sizeof(BankData), 1, windowLog)) {
+            fwrite (&datasets, sizeof(BankData), 1, stream);
         }
         fclose(stream);
-        fclose(windowlog);
+        fclose(windowLog);
         
         printf("\n\t\t     ALERT: ACCOUNT CLOSURE WAS SUCCESSFUL");
         getchar();
@@ -529,17 +532,17 @@ void closeAccount() {
 // for maintenance
 
 void printall() {
-    bankData datasets;
+    BankData datasets;
     FILE *stream;
-    stream = fopen("bank.txt", "r");
+    stream = fopen("ccbl-bank-account-user.txt", "r");
 
-    while(fread(&datasets, sizeof(bankData), 1, stream)) {
+    while(fread(&datasets, sizeof(BankData), 1, stream)) {
         printf("\n\t\t     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
-        printf("\n\t\t     Nama: %s\n", datasets.Name);
+        printf("\n\t\t     Nama: %s\n", datasets.name);
         printf("\n\t\t     PIN: %s\n", datasets.pin);
-        printf("\n\t\t     No HP: %s\n", datasets.person.NoPhone);
-        printf("\n\t\t     Address: %s\n", datasets.person.Address);
-        printf("\n\t\t     Created: %s/%s/%s\n", datasets.times.year, datasets.times.month, datasets.times.day);
+        printf("\n\t\t     No HP: %s\n", datasets.Person.noPhone);
+        printf("\n\t\t     address: %s\n", datasets.Person.address);
+        printf("\n\t\t     Created: %s/%s/%s\n", datasets.Times.year, datasets.Times.month, datasets.Times.day);
         printf("\n\t\t     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
     }
     fclose(stream);
@@ -548,19 +551,19 @@ void printall() {
 
 /**
  * @description: prosedur membuat akun disertai data client
- * @objek: pointer dataset ke struct bankData
+ * @objek: pointer dataset ke struct BankData
  * @input: banyak akun yang dibuat(n)
  * @output: tampilkan sukses jika akun berhasil dibuat, serta gagal jika akun tidak berhasil dibuat
  * @author: Chrysant M
  */
 
 void createAccount() {
-    bankData *dataset;
+    BankData *dataset;
     FILE *stream;
-    stream = fopen("bank.txt", "a");
+    stream = fopen("ccbl-bank-account-user.txt", "a");
     int n, i;
 
-    dataset = (bankData*) calloc(n, sizeof(bankData));
+    dataset = (BankData*) calloc(n, sizeof(BankData));
     printf("\t\t     How many account u wanna create: ");
     scanf("%d", &n);
 
@@ -574,17 +577,17 @@ void createAccount() {
         fflush(stdin);
         printf("\n\t\t     ____________________________________________________________________\n\n");
         printf("\n\t\t      >> NAME         : ");
-        scanf("%[^\n]s", dataset[i].Name);
+        scanf("%[^\n]s", dataset[i].name);
         
         // input kontak client
         fflush(stdin);
         printf("\n\t\t      >> NUMBER PHONE : ");
-        scanf("%[^\n]s", dataset[i].person.NoPhone);
+        scanf("%[^\n]s", dataset[i].Person.noPhone);
 
         // input alamat client
         fflush(stdin);
         printf("\n\t\t      >> ADDRESS      : ");
-        scanf("%[^\n]s", dataset[i].person.Address);
+        scanf("%[^\n]s", dataset[i].Person.address);
 
         // input pin akun
         fflush(stdin);
@@ -594,19 +597,19 @@ void createAccount() {
         // input tahun pembuatan akun
         fflush(stdin);
         printf("\n\t\t      >> YEAR         : ");
-        scanf("%[^\n]s", dataset[i].times.year);
+        scanf("%[^\n]s", dataset[i].Times.year);
 
         // input bulan pembuatan akun
         fflush(stdin);
         printf("\n\t\t      >> MONTH        : ");
-        scanf("%[^\n]s", dataset[i].times.month);
+        scanf("%[^\n]s", dataset[i].Times.month);
 
         // input tanggal pembuatan akun
         fflush(stdin);
         printf("\n\t\t      >> DAY          : ");
-        scanf("%[^\n]s", dataset[i].times.day);
+        scanf("%[^\n]s", dataset[i].Times.day);
 
-        fwrite(&dataset[i], sizeof(bankData), 1, stream);
+        fwrite(&dataset[i], sizeof(BankData), 1, stream);
         printf("\n\t\t     ALERT: ACCOUNT #%d CREATED SUCCESSFULLY.\n", i+1);
         printf("\n\t\t     ____________________________________________________________________\n\n");
     }
@@ -622,16 +625,16 @@ void createAccount() {
 }
 
 /**
- * @description: prosedur yang membuat file dengan nama bank.txt
- * @objek: pointer dataset ke struct bankData
+ * @description: prosedur yang membuat file dengan nama bank-ccbl-user.txtaccount-
+ * @objek: pointer dataset ke struct BankData
  * @output: tampilkan sukses jika file data  berhasil dibuat, serta gagal jika file data tidak berhasil dibuat
  * @author: Ayasha K
  */
 
 void createFileData() {
-    bankData *dataset;
+    BankData *dataset;
     FILE *stream;
-    stream = fopen("bank.txt", "w");
+    stream = fopen("ccbl-bank-account-user.txt", "w");
     
     if (stream) {
         printf("\n\t\t     ALERT: DATA FILE CREATED SUCCESSFULLY.\n");
@@ -667,7 +670,7 @@ int optionFeatures(char *act) {
                     return(1);
                 }
                 valid = validationUser(0);
-                printf("\n\t\t     ALERT: SORRY, YOUR PIN OR USERNAME WAS INCORRECT.\n");
+                printf("\n\t\t     ALERT: SORRY, YOUR PIN OR userName WAS INCORRECT.\n");
                 printf("\t\t            PLEASE DOUBLE-CHECK YOUR PASSWORD.\n");
             } while (valid==0);
             system("cls") || system("clear");
@@ -764,8 +767,8 @@ int optionFeatures(char *act) {
 
 int validationUser(int hasil) {
     FILE *stream;
-    bankData dataset;
-    stream = fopen("bank.txt", "r");
+    BankData dataset;
+    stream = fopen("ccbl-bank-account-user.txt", "r");
     
     if (stream == NULL) {
         printf("\n\t\t     ALERT: FILE NOT FOUND\n");
@@ -773,7 +776,7 @@ int validationUser(int hasil) {
     }
     
     char pin[9];
-    char username[50];
+    char userName[50];
     hasil = 0;
 
     // input name & pin
@@ -783,18 +786,18 @@ int validationUser(int hasil) {
 
     fflush(stdin);
     printf("\n\t\t     NAME\t: ");
-    scanf("%[^\n]s", username);
+    scanf("%[^\n]s", userName);
 
     fflush(stdin);
     printf("\t\t     PIN \t: ");
     scanf("%[^\n]s", pin);
     
     // Validation
-    while(fread(&Dataset, sizeof(bankData), 1, stream)){
-        if((strcmp(dataset.pin, pin) == 0) && (strcmp(dataset.Name, username) == 0)) {
+    while(fread(&dataset, sizeof(BankData), 1, stream)){
+        if((strcmp(dataset.pin, pin) == 0) && (strcmp(dataset.name, userName) == 0)) {
             hasil = 1;
             return hasil;
-        }else if ((strcmp(dataset.pin, pin) != 0) || (strcmp(dataset.Name, username) != 0)) {
+        }else if ((strcmp(dataset.pin, pin) != 0) || (strcmp(dataset.name, userName) != 0)) {
             hasil = 0;
             continue;
         }
