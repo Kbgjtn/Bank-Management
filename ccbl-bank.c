@@ -7,13 +7,8 @@ amount of deposit is Rp. 100.000. Any value below that limit should be responded
 */
 
 // file lib-header
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 // pre-process
-#define lli long long int
-#define MAX_SIZE 1000
 
 /**
  * @description: structure bank data untuk menyimpan data client dan waktu pembuatan 
