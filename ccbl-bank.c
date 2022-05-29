@@ -6,7 +6,7 @@ amount of deposit is Rp. 100.000. Any value below that limit should be responded
 * @uthors: coocobolo
 */
 
-// file lib-header
+/* declare lib-header */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,12 +35,10 @@ typedef struct BankData {
         char month[15];
         char day[3];
     } Times;
+
 } BankData;
 
-// initialization functions
-int optionFeatures(char *act);
-int validationUser(int hasil);
-char *toLowerCase(char *words, size_t length);
+/* initialization functions */
 void team15();
 void accountInfo();
 void closeAccount();
@@ -48,9 +46,12 @@ void createAccount();
 void createFileData();
 void display(char act);
 void displayTransaction();
-void nowUser(char *pin, char *userName);
 void printall();
 void transaction();
+int optionFeatures(char *act);
+int validationUser(int hasil);
+void nowUser(char *pin, char *userName);
+char *toLowerCase(char *words, size_t length);
 
 
 /**
@@ -63,9 +64,16 @@ void transaction();
 int main() {
     // declare variable
     char action;
-    int count;
-    
+    int countError = 3;
+   
     do {
+        
+        if (!countError) {
+            printf("\n\t\t     message: EXIT PROGRAM, YOU EXCEED THE MAXIMUM LIMITATION ERROR INPUT!");
+            getchar();
+            exit(EXIT_FAILURE);
+        }
+
         team15();
 
         printf("\t\t     nb: ");
@@ -86,6 +94,9 @@ int main() {
         
         getchar();
         system("cls") || system("clear");
+        
+        // count error limitation 
+        countError--;
 
     } while ((action != 'y') || (action != 'Y') || (action != 'N') || (action != 'n'));    
 
@@ -93,6 +104,7 @@ int main() {
 
     // return value 0  
     return 0;
+    exit(EXIT_SUCCESS);
 }
 
 /**
@@ -664,12 +676,18 @@ int optionFeatures(char *act) {
             
             do {
                 count--;
+                
+                // checking the limit max is 5 times
                 if (count == 0) {
+                    system("cls") || system("clear");
                     getchar();
-                    printf("\n\t\t     ALERT: EXIT PROGRAM, YOU EXCEED THE MAXIMUM LIMIT!");
-                    return(0);
+                    printf("\n\t\t     ALERT: EXIT PROGRAM, YOU EXCEED THE MAXIMUM LIMIT LOGIN!");
+                    getchar();
+                    exit(EXIT_FAILURE);
                 }
+                
                 valid = validationUser(0);
+
                 printf("\n\t\t     ALERT: SORRY, YOUR USERNAME OR PIN WAS INCORRECT.\n");
                 printf("\t\t            PLEASE DOUBLE-CHECK YOUR INPUT.\n");
             } while (valid == 0);
@@ -689,6 +707,10 @@ int optionFeatures(char *act) {
 
                 // condition option of feature
                 switch(option) {
+                        case 0: /* exit program */
+                        printf("\n\t\t     Output: Exit Program!\n");
+                        exit(EXIT_SUCCESS);
+                        break;
                     case 1:
                         // function create call
                         accountInfo();
@@ -704,11 +726,7 @@ int optionFeatures(char *act) {
                         closeAccount();
                         getchar();
                         break;
-                    case 0:
-                        // exit program
-                        printf("\n\t\t     Output: Exit Program!\n");
-                        exit(1);
-                        break;
+
                     default:
                         // else condition
                         team15();
